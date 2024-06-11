@@ -1,30 +1,40 @@
 ---
-title: "Git_Fake_Project"
+title: "Git Fake Project"
 author: "Matilda Andersson"
 date: "2024-06-11"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+You are starting a new project and want to connect it to GitHub
+New project in a new directory
+```{r}
+#connect it to github
+usethis::use_git()
+#you then have to go to the console and write 1
 ```
 
-## R Markdown
+load oxygen data
+```{r}
+# Step 1: Read the file into a character vector
+file_path <- "FakeProjectData/SITES_ADD-PROF_ASA_FER_20170817-20171115_L2_30min.csv"
+lines <- readLines(file_path)
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+# Step 2: Find the line containing the delimiter
+delimiter <- "####"
+delimiter_line <- grep(delimiter, lines)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+# Check if the delimiter was found
+if (length(delimiter_line) == 0) {
+  stop("Delimiter not found in the file.")
+}
 
-```{r cars}
-summary(cars)
+# Step 3: Read the file again, skipping lines before the delimiter
+# Adjust the starting line to skip the delimiter line itself
+start_line <- delimiter_line
+data <- read.csv(file_path, skip = start_line)
+
+# Print the loaded data
+print(data)
+
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
